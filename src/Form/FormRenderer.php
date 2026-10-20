@@ -242,7 +242,8 @@ final class FormRenderer {
 	 */
 	private static function placeholder( string $key, array $def ): string {
 		if ( 'domain' === $key ) {
-			return home_url();
+			// The network form serves every site, so no single URL applies.
+			return SettingsContext::is_network() ? '' : home_url();
 		}
 		return (string) ( $def['placeholder'] ?? '' );
 	}

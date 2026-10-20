@@ -7,6 +7,8 @@
 
 namespace LinkPurpose;
 
+use LinkPurpose\Form\NetworkDefaultsWorker;
+use LinkPurpose\Form\NetworkSettingsPage;
 use LinkPurpose\Form\SettingsPage;
 use LinkPurpose\Frontend\Assets;
 
@@ -53,6 +55,15 @@ final class Plugin {
 
 		if ( is_admin() ) {
 			( new SettingsPage() )->register();
+		}
+
+		if ( is_multisite() ) {
+			// Cron tick + new-site seeder run on any request; the network
+			// defaults page (and its admin-post save handler) only in admin.
+			NetworkDefaultsWorker::register();
+			if ( is_admin() ) {
+				( new NetworkSettingsPage() )->register();
+			}
 		}
 	}
 

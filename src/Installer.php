@@ -26,6 +26,22 @@ final class Installer {
 	const NETWORK_OPTION = 'linkpurpose_network_settings';
 
 	/**
+	 * Network option holding the backfill worker's run state
+	 * ({@see Form\NetworkDefaultsWorker}). Transient per run.
+	 */
+	const WORKER_STATE_OPTION = 'linkpurpose_network_backfill_state';
+
+	/**
+	 * Network option holding every value the network has ever published for
+	 * each key — the worker's "is this site still tracking the network"
+	 * trail. Outlives individual runs; only uninstall removes it.
+	 */
+	const WORKER_HISTORY_OPTION = 'linkpurpose_network_history';
+
+	/** WP-Cron hook the backfill worker ticks on. */
+	const WORKER_CRON_HOOK = 'linkpurpose_network_backfill';
+
+	/**
 	 * Activation. Nothing to seed: the read pipeline falls back to
 	 * hardcoded defaults for every key the option lacks, so a fresh install
 	 * is fully configured with an empty option row.
@@ -42,13 +58,17 @@ final class Installer {
 	}
 
 	/**
-	 * Deactivation. Settings are preserved.
+	 * Deactivation. Settings are preserved; a queued backfill tick is
+	 * dropped so WP-Cron is not left with an event whose callback is gone.
+	 * The run state stays: the next network save starts a fresh run anyway.
 	 */
-	public static function deactivate(): void {}
+	public static function deactivate(): void {
+		wp_unschedule_hook( self::WORKER_CRON_HOOK );
+	}
 
 	/**
 	 * Uninstall: delete the per-site option on every site, then the network
-	 * option. WordPress fires uninstall exactly once (in the network-admin
+	 * options. WordPress fires uninstall exactly once (in the network-admin
 	 * context on multisite), so the site iteration is ours to do.
 	 */
 	public static function uninstall(): void {
@@ -67,6 +87,9 @@ final class Installer {
 		} else {
 			delete_option( self::OPTION );
 		}
+		wp_unschedule_hook( self::WORKER_CRON_HOOK );
 		delete_site_option( self::NETWORK_OPTION );
+		delete_site_option( self::WORKER_STATE_OPTION );
+		delete_site_option( self::WORKER_HISTORY_OPTION );
 	}
 }

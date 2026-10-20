@@ -44,16 +44,20 @@ src/Plugin.php                hook orchestrator; Plugin::VERSION is the asset ca
 src/Installer.php             activate / uninstall; option-name constants
 src/Settings/Schema.php       THE registry: every field (type, default, label, help, depends) + layout tree
 src/Settings/Settings.php     read pipeline: network lock → stored value → schema default; filter linkpurpose_settings
-src/Settings/FieldSanitizer.php  per-type/format sanitize rules (shared by site + future network validators)
+src/Settings/FieldSanitizer.php  per-type/format sanitize rules (shared by the site and network validators)
 src/Form/SettingsPage.php     Settings → Link Purpose; register_setting; page shell
 src/Form/FormRenderer.php     Schema::layout() → fieldset/details/form-table HTML, context-aware
 src/Form/SettingsContext.php  site|network render context: value, input name, disabled, lock note, mode dropdown
 src/Form/SettingsValidator.php  register_setting sanitize callback; coerces network-locked keys
 src/Form/ConditionalFields.php  data-linkpurpose-when attribute (Drupal #states stand-in) + script enqueue
+src/Form/NetworkSettingsPage.php  Network Admin → Settings → Link Purpose; admin_post save handler, notices, heartbeat panel
+src/Form/NetworkSettingsValidator.php  network_values[] + network_modes[] → {values, modes}; drops modes on empty text
+src/Form/NetworkDefaultsWorker.php  wp_initialize_site seeder + WP-Cron backfill (cursor, coalesce, history, lock force-write)
 src/Frontend/ConfigBuilder.php  effective settings → window.linkpurposeSettings payload; filter linkpurpose_js_settings
 src/Frontend/Assets.php       wp_enqueue_scripts: library + CSS + inline payload (+ init shim unless themePreprocess)
 assets/js/linkpurpose-wp.js   init shim (port of linkpurpose-drupal.js): validates selectors, builds options, new LinkPurpose()
 assets/js/linkpurpose-admin.js  conditional-visibility toggles on the settings page
+assets/js/linkpurpose-network.js  heartbeat client refreshing the backfill panel on the network page
 assets/lib/                   vendored library (js/linkpurpose.js, .min.js, css/linkpurpose.css) — regenerate via scripts/get.sh
 tests/                        PHPUnit (WP_UnitTestCase, real $wpdb) + tests/js/unit (Vitest)
 ```
@@ -64,7 +68,7 @@ tests/                        PHPUnit (WP_UnitTestCase, real $wpdb) + tests/js/u
 - **Add a field by adding one schema entry.** Form, sanitizer, read pipeline, JS payload and the schema integrity tests pick it up. Never hand-write a field renderer.
 - **Stored shape is all strings**: `'1'`/`''` for checkboxes, option key for selects. The validator writes every schema key on every save; the read pipeline uses `array_key_exists`, not `empty()`, so an unchecked checkbox (`''`) never falls back to a default of `'1'`.
 - **Empty text = "use the library default".** PHP resolves only screen-reader messages (to translated defaults); the JS init resolves everything else, exactly like the Drupal initializer. Selector validity can only be tested in a browser, so it stays in JS.
-- **Network defaults** use the Editoria11y model: `linkpurpose_network_settings` = `{values, modes}`, `modes[key] ∈ {new, all, lock}`. Only `lock` is read-time (implemented). `new`/`all` need the seeder/backfill worker (next session). `SettingsContext` already renders the network variant of the form; the network page, validator and worker are not written yet.
+- **Network defaults** use the Editoria11y model: `linkpurpose_network_settings` = `{values, modes}`, `modes[key] ∈ {new, all, lock}`. `lock` is overlaid at read time (`Settings`) and coerced on site saves (`SettingsValidator`). `new` seeds new sites on `wp_initialize_site`; `all` also backfills existing sites through `NetworkDefaultsWorker`, which overwrites a site value only when it is absent, equals any value the network ever published (`linkpurpose_network_history`) or equals the schema default; `lock` force-writes. The network page rejects "orphan" saves (value changed, mode none). Modes on EMPTY text values are dropped (reported as inert); modes on checkbox/select values are always kept because `''` is a real value there. Worker writes bypass the Settings API sanitize filter on purpose (see `write_site_settings()`).
 - **Text domain is `linkpurpose`** (pinned in phpcs.xml.dist and a test). It must equal the WordPress.org slug — confirm the slug before first submission.
 - **Translations**: no `load_plugin_textdomain()`; WP.org just-in-time loading. Labels are built lazily in `Schema` so nothing translates before `init`.
 - **No Composer at runtime.** `linkpurpose.php` registers its own PSR-4 autoloader; `vendor/` is dev-only and `.distignore`d.
@@ -73,7 +77,7 @@ tests/                        PHPUnit (WP_UnitTestCase, real $wpdb) + tests/js/u
 
 ### Testing
 
-PHPUnit runs against a real database (`linkpurpose_test`, separate from Editoria11y's `wordpress_test`) via `wp-phpunit/wp-phpunit`; `tests/wp-tests-config.php` points ABSPATH at the container's `/var/www/html`. Run the suite twice — plain and `WP_MULTISITE=1` — because network tests `markTestSkipped()` on single-site. Vitest loads the classic scripts in `assets/js/` through dynamic `import()` with `vi.resetModules()` and stubs `globalThis.LinkPurpose` / `window.linkpurposeSettings`.
+PHPUnit runs against a real database (`linkpurpose_test`, separate from Editoria11y's `wordpress_test`) via `wp-phpunit/wp-phpunit`; `tests/wp-tests-config.php` points ABSPATH at the container's `/var/www/html`. Run the suite twice — plain and `WP_MULTISITE=1` — because network tests `markTestSkipped()` on single-site. The network page tests drive `NetworkSettingsPage::save_from_post()` with the REAL rendered form serialized the way a browser posts it (see `serialize_form()` in class-test-network-settings-page.php); do the same for new save-path tests rather than hand-writing POST arrays — the orphan/default bugs only show up with what an untouched form actually posts. Vitest loads the classic scripts in `assets/js/` through dynamic `import()` with `vi.resetModules()` and stubs `globalThis.LinkPurpose` / `window.linkpurposeSettings`.
 
 When a test needs the settings form, render it with `FormRenderer::render()` (or `render_field_row()`) rather than hand-crafting markup; wrap in `SettingsContext::push('network')` / `pop()` for the network variant.
 

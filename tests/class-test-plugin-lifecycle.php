@@ -36,6 +36,24 @@ class Test_LinkPurpose_PluginLifecycle extends WP_UnitTestCase {
 		$this->assertFalse( get_site_option( Settings::NETWORK_OPTION ) );
 	}
 
+	public function test_uninstall_removes_worker_state_history_and_queued_tick() {
+		update_site_option( Installer::WORKER_STATE_OPTION, array( 'status' => 'running' ) );
+		update_site_option( Installer::WORKER_HISTORY_OPTION, array( 'roots' => array( 'a' ) ) );
+		wp_schedule_single_event( time() + 60, Installer::WORKER_CRON_HOOK );
+		Installer::uninstall();
+		$this->assertFalse( get_site_option( Installer::WORKER_STATE_OPTION ) );
+		$this->assertFalse( get_site_option( Installer::WORKER_HISTORY_OPTION ) );
+		$this->assertFalse( wp_next_scheduled( Installer::WORKER_CRON_HOOK ) );
+	}
+
+	public function test_deactivate_drops_the_queued_tick_but_keeps_settings() {
+		update_option( Settings::OPTION, array( 'roots' => 'x' ) );
+		wp_schedule_single_event( time() + 60, Installer::WORKER_CRON_HOOK );
+		Installer::deactivate();
+		$this->assertFalse( wp_next_scheduled( Installer::WORKER_CRON_HOOK ) );
+		$this->assertSame( array( 'roots' => 'x' ), get_option( Settings::OPTION ) );
+	}
+
 	public function test_uninstall_walks_every_site_on_multisite() {
 		if ( ! is_multisite() ) {
 			$this->markTestSkipped( 'multisite only' );

@@ -38,7 +38,7 @@ Yes. Switch a category's icon type to "Classes" and provide icon-font classes (F
 
 = Does it work on multisite? =
 
-Yes. Network administrators can lock settings for every site.
+Yes. Network Admin → Settings → Link Purpose lets super administrators set a default for any setting and choose how it propagates: to new sites only, to all sites that have not customized it, or as a lock that every site must use.
 
 == Changelog ==
 

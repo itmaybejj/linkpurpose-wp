@@ -65,3 +65,25 @@
 .linkpurpose-settings .linkpurpose-network-mode {
 	margin: 0.5em 0 0;
 }
+
+/* Network Admin → Settings → Link Purpose defaults */
+
+.linkpurpose-settings .linkpurpose-propagation-help {
+	max-width: 60em;
+	margin: 1em 0;
+}
+
+.linkpurpose-settings .linkpurpose-network-mode label {
+	display: inline-block;
+	margin-right: 0.5em;
+	font-weight: 600;
+}
+
+.linkpurpose-settings .linkpurpose-notice-list {
+	list-style: disc;
+	margin: 0.5em 0 0.5em 2em;
+}
+
+#linkpurpose-backfill-panel .notice.inline {
+	margin: 1em 0;
+}

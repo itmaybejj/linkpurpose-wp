@@ -56,7 +56,7 @@ linkpurpose-wp/
 ├── uninstall.php
 ├── src/                 PSR-4, namespace LinkPurpose\  (see AGENTS.md for the class map)
 ├── assets/
-│   ├── js/              hand-written: linkpurpose-wp.js (front-end init), linkpurpose-admin.js
+│   ├── js/              hand-written: linkpurpose-wp.js (front-end init), linkpurpose-admin.js, linkpurpose-network.js
 │   ├── css/             linkpurpose-admin.css
 │   └── lib/             VENDORED library — do not edit; scripts/get.sh regenerates
 ├── languages/           linkpurpose.pot (generated)
@@ -81,7 +81,8 @@ Developer hooks:
 | `linkpurpose_enabled` (filter, bool) | Return false to keep the plugin off a request. |
 | `linkpurpose_settings` (filter, array) | Adjust effective settings after the read pipeline. |
 | `linkpurpose_js_settings` (filter, array) | Adjust the payload; add `baseSelector`, `baseLinkClass`, `baseIconWrapperClass`, `noBreakClass`. |
-| `linkpurpose_settings_validated` (action, array) | Fires on save with the sanitized settings; purge page caches here. |
+| `linkpurpose_settings_validated` (action, array) | Fires on a site save with the sanitized settings, and again on the site whenever network propagation writes its option; purge that site's page cache here. |
+| `linkpurpose_network_settings_saved` (action, new, old) | Fires after the network defaults are stored. Lock changes apply to every site at read time, so purge network-wide caches here. |
 | `window.linkPurposeOptions(options)` (JS) | Receive/replace the built options object before the library starts. |
 
 ## Caching
@@ -90,7 +91,16 @@ Static assets are versioned with `?ver=<Plugin::VERSION>`, so they're safe to ca
 
 ## Multisite
 
-`linkpurpose_network_settings` (`wp_sitemeta`) holds `{values, modes}`; a key with mode `lock` overrides every site at read time and renders disabled on the site form. Modes `new` and `all` (seed new sites / backfill existing sites) are reserved for the network defaults page + cron worker to be ported from Editoria11y in the next session. Until then the option can only be written programmatically (`update_site_option`).
+Network Admin → Settings → Link Purpose renders the same schema form with a propagation dropdown per field. `linkpurpose_network_settings` (`wp_sitemeta`) holds `{values, modes}`:
+
+| Mode | Effect |
+|------|--------|
+| *No network default* | Value stored, nothing happens. Saving a changed value in this mode is rejected ("orphan" notice) unless the value is the plugin default. |
+| `new` | Seeded into a site's option when the site is created (`wp_initialize_site`). |
+| `all` | Seeded into new sites and backfilled into existing ones by a WP-Cron worker (`NetworkDefaultsWorker`, 25 sites per tick, self-rescheduling; `LINKPURPOSE_WORKER_MIN_GAP_SECONDS` tunes the gap). A site is overwritten only while it is still "tracking the network": no stored value, a value the network published before (`linkpurpose_network_history`), or the plugin default. Any other value is a per-site customization and is left alone. |
+| `lock` | Overlaid at read time on every site, rendered disabled on the site form, coerced on site saves — and force-written once so unlocking later leaves sites on the network value. |
+
+A mode set on an empty text field is dropped (and reported) because an empty value already means "plugin default". Unchecked checkboxes are a real value (`''`) and keep their mode. Saving while a backfill runs coalesces into the running job and re-walks from the first site. The status panel above the form refreshes over the WP Heartbeat API; `linkpurpose_network_backfill_state` holds the run state. Uninstall removes all three network options.
 
 ## Releasing
 
