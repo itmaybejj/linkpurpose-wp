@@ -23,16 +23,13 @@ defined( 'ABSPATH' ) || exit;
  * stored as ''), exactly like the per-site validator — the network blob is
  * authored from scratch each time, never merged.
  *
- * Modes (`new` | `all` | `lock`) are kept only where they can do
- * something:
- *
- *   - checkbox / select: always kept. '' IS a value for a checkbox
- *     ("locked off", "default off for all sites").
- *   - text / textarea: dropped when the value is ''. An empty text value
- *     means "use the library default", so there is nothing to seed or
- *     backfill, and a lock on it would pin sites to a default they already
- *     have. Dropped keys are reported so the page can say so instead of
- *     silently reverting the dropdown.
+ * Modes (`new` | `all` | `lock`) are kept for every field type, including
+ * a text field whose value is ''. An empty text value is a real
+ * instruction — "use the plugin default" — so a network admin can push
+ * sites back to the default under `all` or pin them to it under `lock`,
+ * exactly as an unchecked checkbox can be propagated as "off". (The
+ * Editoria11y plugin drops such modes as inert; this plugin deliberately
+ * does not.)
  */
 final class NetworkSettingsValidator {
 
@@ -40,9 +37,7 @@ final class NetworkSettingsValidator {
 	 * Sanitize one POST.
 	 *
 	 * @param array<string,mixed> $post Unslashed POST array.
-	 * @return array{values: array<string,string>, modes: array<string,string>, inert: array<int,string>}
-	 *         `inert` lists keys whose propagating mode was dropped because
-	 *         the text value is empty.
+	 * @return array{values: array<string,string>, modes: array<string,string>}
 	 */
 	public static function validate( array $post ): array {
 		$raw_values = self::sub_array( $post, SettingsContext::NETWORK_VALUES_PREFIX );
@@ -54,13 +49,8 @@ final class NetworkSettingsValidator {
 		}
 
 		$modes = array();
-		$inert = array();
 		foreach ( $raw_modes as $key => $mode ) {
 			if ( ! is_string( $key ) || ! Schema::has( $key ) || ! is_string( $mode ) || ! in_array( $mode, Settings::MODES, true ) ) {
-				continue;
-			}
-			if ( '' === $values[ $key ] && self::is_text_field( $key ) ) {
-				$inert[] = $key;
 				continue;
 			}
 			$modes[ $key ] = $mode;
@@ -69,18 +59,7 @@ final class NetworkSettingsValidator {
 		return array(
 			'values' => $values,
 			'modes'  => $modes,
-			'inert'  => $inert,
 		);
-	}
-
-	/**
-	 * Whether a key is a free-text field (as opposed to a fixed choice).
-	 *
-	 * @param string $key Storage key.
-	 */
-	public static function is_text_field( string $key ): bool {
-		$def = Schema::field( $key );
-		return null !== $def && in_array( $def['type'], array( 'text', 'textarea' ), true );
 	}
 
 	/**

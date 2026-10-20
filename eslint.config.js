@@ -45,6 +45,22 @@ export default [
 		},
 	},
 	{
+		// Playwright specs + helpers run under Node (child_process, fs, process.env).
+		files: [ 'tests/js/e2e/**/*.js' ],
+		languageOptions: {
+			ecmaVersion: 2022,
+			sourceType: 'module',
+			globals: {
+				...globals.browser,
+				...globals.node,
+			},
+		},
+		rules: {
+			'no-console': 'off',
+			'no-unused-vars': [ 'warn', { args: 'none', caughtErrorsIgnorePattern: '^_' } ],
+		},
+	},
+	{
 		files: [ '*.config.js' ],
 		languageOptions: {
 			ecmaVersion: 2022,

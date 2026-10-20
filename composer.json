@@ -41,6 +41,8 @@
         "eslint-fix": "npx --no-install eslint --fix assets/js/ tests/js/",
         "test-js": "npx --no-install vitest run",
         "test-js-watch": "npx --no-install vitest",
+        "test-e2e": "npx --no-install playwright test",
+        "schema-fixture": "wp eval-file scripts/export-schema-fixture.php --skip-themes",
         "make-pot": "wp i18n make-pot . languages/linkpurpose.pot --slug=linkpurpose --domain=linkpurpose --exclude=vendor,node_modules,build,tests,scripts,assets/lib",
         "dist": "bash scripts/build-dist.sh"
     }

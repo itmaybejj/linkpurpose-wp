@@ -121,7 +121,7 @@ final class NetworkSettingsPage {
 	 */
 	public static function propagation_help_text(): string {
 		return __(
-			'"Default for all sites" and "Override for all sites" replace a site\'s current value whenever that value is still a plugin default or a previous network default — including a per-site value that happens to match one.',
+			'"Default for all sites" and "Override for all sites" replace a site\'s current value whenever that value is still a plugin default or a previous network default — including a per-site value that happens to match one. Leaving a text field blank with a propagation mode sends "use the plugin default" to sites, so a blank "Override for all sites" pins sites to the default.',
 			'linkpurpose'
 		);
 	}
@@ -159,14 +159,13 @@ final class NetworkSettingsPage {
 	}
 
 	/**
-	 * Post-redirect notices: saved, rejected (orphans), ignored modes.
+	 * Post-redirect notices: saved, or rejected (orphans).
 	 */
 	private static function render_notices(): void {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- display-only flag set by our own redirect.
 		$updated = isset( $_GET['updated'] ) && '1' === $_GET['updated'];
 		$notice  = self::take_notice();
 		$orphans = self::labels_for( $notice['orphans'] ?? array() );
-		$inert   = self::labels_for( $notice['inert'] ?? array() );
 
 		if ( ! empty( $orphans ) ) {
 			?>
@@ -182,14 +181,6 @@ final class NetworkSettingsPage {
 			?>
 			<div class="notice notice-success is-dismissible">
 				<p><?php esc_html_e( 'Network defaults saved.', 'linkpurpose' ); ?></p>
-			</div>
-			<?php
-		}
-		if ( ! empty( $inert ) ) {
-			?>
-			<div class="notice notice-warning">
-				<p><?php esc_html_e( 'Propagation was ignored for these settings because they are empty. An empty value means "use the plugin default", so there is nothing to send to sites:', 'linkpurpose' ); ?></p>
-				<?php self::print_label_list( $inert ); ?>
 			</div>
 			<?php
 		}
@@ -385,14 +376,8 @@ final class NetworkSettingsPage {
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- every element is sanitized per field by NetworkSettingsValidator.
 		$result = self::save_from_post( (array) wp_unslash( $_POST ) );
 
-		$notice = array_filter(
-			array(
-				'orphans' => $result['orphans'],
-				'inert'   => $result['inert'],
-			)
-		);
-		if ( ! empty( $notice ) ) {
-			set_transient( self::NOTICE_TRANSIENT . get_current_user_id(), $notice, MINUTE_IN_SECONDS );
+		if ( ! empty( $result['orphans'] ) ) {
+			set_transient( self::NOTICE_TRANSIENT . get_current_user_id(), array( 'orphans' => $result['orphans'] ), MINUTE_IN_SECONDS );
 		}
 		wp_safe_redirect( add_query_arg( 'updated', $result['saved'] ? '1' : '0', self::url() ) );
 		exit;
@@ -407,20 +392,18 @@ final class NetworkSettingsPage {
 	 * "still tracking" rule needs the value sites may currently hold.
 	 *
 	 * @param array<string,mixed> $post Unslashed POST.
-	 * @return array{saved: bool, orphans: array<int,string>, inert: array<int,string>, dirty: array<string,array<string,mixed>>}
+	 * @return array{saved: bool, orphans: array<int,string>, dirty: array<string,array<string,mixed>>}
 	 */
 	public static function save_from_post( array $post ): array {
 		$old       = Settings::network_storage();
 		$validated = NetworkSettingsValidator::validate( $post );
 		$new       = Settings::normalize_network_storage( $validated );
-		$inert     = $validated['inert'];
 
 		$orphans = NetworkDefaultsWorker::detect_orphan_changed_keys( $old, $new );
 		if ( ! empty( $orphans ) ) {
 			return array(
 				'saved'   => false,
 				'orphans' => $orphans,
-				'inert'   => $inert,
 				'dirty'   => array(),
 			);
 		}
@@ -452,7 +435,6 @@ final class NetworkSettingsPage {
 		return array(
 			'saved'   => true,
 			'orphans' => array(),
-			'inert'   => $inert,
 			'dirty'   => $dirty,
 		);
 	}

@@ -1,0 +1,384 @@
+{
+    "domain": {
+        "type": "textarea",
+        "default": "",
+        "format": "domain"
+    },
+    "roots": {
+        "type": "textarea",
+        "default": "",
+        "format": "selector"
+    },
+    "hideIcon": {
+        "type": "textarea",
+        "default": "",
+        "format": "selector"
+    },
+    "noIconOnImages": {
+        "type": "checkbox",
+        "default": ""
+    },
+    "ignore": {
+        "type": "textarea",
+        "default": "",
+        "format": "selector"
+    },
+    "suppressNoBreak": {
+        "type": "textarea",
+        "default": "",
+        "format": "selector"
+    },
+    "insertIconOutsideHiddenSpan": {
+        "type": "textarea",
+        "default": "",
+        "format": "selector"
+    },
+    "shadowComponents": {
+        "type": "textarea",
+        "default": "",
+        "format": "selector"
+    },
+    "noRunIfPresent": {
+        "type": "textarea",
+        "default": "",
+        "format": "selector"
+    },
+    "noRunIfAbsent": {
+        "type": "textarea",
+        "default": "",
+        "format": "selector"
+    },
+    "themePreprocess": {
+        "type": "checkbox",
+        "default": ""
+    },
+    "purposeExternal": {
+        "type": "checkbox",
+        "default": "1"
+    },
+    "purposeExternalNoReferrer": {
+        "type": "checkbox",
+        "default": ""
+    },
+    "purposeExternalNewWindow": {
+        "type": "checkbox",
+        "default": ""
+    },
+    "purposeExternalIconType": {
+        "type": "select",
+        "default": "html",
+        "options": [
+            "html",
+            "classes"
+        ]
+    },
+    "purposeExternalIconClasses": {
+        "type": "textarea",
+        "default": "",
+        "format": "css_classes"
+    },
+    "purposeExternalIconPosition": {
+        "type": "select",
+        "default": "beforeend",
+        "options": [
+            "beforeend",
+            "beforebegin",
+            "afterbegin",
+            "afterend"
+        ]
+    },
+    "purposeExternalMessage": {
+        "type": "text",
+        "default": "",
+        "format": "plain",
+        "messageDefault": "Link is external"
+    },
+    "purposeExternalClass": {
+        "type": "text",
+        "default": "",
+        "format": "css_class"
+    },
+    "purposeExternalIconWrapperClass": {
+        "type": "text",
+        "default": "",
+        "format": "css_class"
+    },
+    "purposeExternalSelector": {
+        "type": "textarea",
+        "default": "",
+        "format": "selector"
+    },
+    "purposeDocument": {
+        "type": "checkbox",
+        "default": "1"
+    },
+    "purposeDocumentIconType": {
+        "type": "select",
+        "default": "html",
+        "options": [
+            "html",
+            "classes"
+        ]
+    },
+    "purposeDocumentIconClasses": {
+        "type": "textarea",
+        "default": "",
+        "format": "css_classes"
+    },
+    "purposeDocumentIconPosition": {
+        "type": "select",
+        "default": "beforeend",
+        "options": [
+            "beforeend",
+            "beforebegin",
+            "afterbegin",
+            "afterend"
+        ]
+    },
+    "purposeDocumentMessage": {
+        "type": "text",
+        "default": "",
+        "format": "plain",
+        "messageDefault": "Link downloads document"
+    },
+    "purposeDocumentClass": {
+        "type": "text",
+        "default": "",
+        "format": "css_class"
+    },
+    "purposeDocumentIconWrapperClass": {
+        "type": "text",
+        "default": "",
+        "format": "css_class"
+    },
+    "purposeDocumentSelector": {
+        "type": "textarea",
+        "default": "",
+        "format": "selector"
+    },
+    "purposeDownload": {
+        "type": "checkbox",
+        "default": "1"
+    },
+    "purposeDownloadIconType": {
+        "type": "select",
+        "default": "html",
+        "options": [
+            "html",
+            "classes"
+        ]
+    },
+    "purposeDownloadIconClasses": {
+        "type": "textarea",
+        "default": "",
+        "format": "css_classes"
+    },
+    "purposeDownloadIconPosition": {
+        "type": "select",
+        "default": "beforeend",
+        "options": [
+            "beforeend",
+            "beforebegin",
+            "afterbegin",
+            "afterend"
+        ]
+    },
+    "purposeDownloadMessage": {
+        "type": "text",
+        "default": "",
+        "format": "plain",
+        "messageDefault": "Link downloads file"
+    },
+    "purposeDownloadClass": {
+        "type": "text",
+        "default": "",
+        "format": "css_class"
+    },
+    "purposeDownloadIconWrapperClass": {
+        "type": "text",
+        "default": "",
+        "format": "css_class"
+    },
+    "purposeDownloadSelector": {
+        "type": "textarea",
+        "default": "",
+        "format": "selector"
+    },
+    "purposeApp": {
+        "type": "checkbox",
+        "default": "1"
+    },
+    "purposeAppIconType": {
+        "type": "select",
+        "default": "html",
+        "options": [
+            "html",
+            "classes"
+        ]
+    },
+    "purposeAppIconClasses": {
+        "type": "textarea",
+        "default": "",
+        "format": "css_classes"
+    },
+    "purposeAppIconPosition": {
+        "type": "select",
+        "default": "beforeend",
+        "options": [
+            "beforeend",
+            "beforebegin",
+            "afterbegin",
+            "afterend"
+        ]
+    },
+    "purposeAppMessage": {
+        "type": "text",
+        "default": "",
+        "format": "plain",
+        "messageDefault": "Link opens app"
+    },
+    "purposeAppClass": {
+        "type": "text",
+        "default": "",
+        "format": "css_class"
+    },
+    "purposeAppIconWrapperClass": {
+        "type": "text",
+        "default": "",
+        "format": "css_class"
+    },
+    "purposeAppSelector": {
+        "type": "textarea",
+        "default": "",
+        "format": "selector"
+    },
+    "purposeMail": {
+        "type": "checkbox",
+        "default": "1"
+    },
+    "purposeMailIconType": {
+        "type": "select",
+        "default": "html",
+        "options": [
+            "html",
+            "classes"
+        ]
+    },
+    "purposeMailIconClasses": {
+        "type": "textarea",
+        "default": "",
+        "format": "css_classes"
+    },
+    "purposeMailIconPosition": {
+        "type": "select",
+        "default": "beforeend",
+        "options": [
+            "beforeend",
+            "beforebegin",
+            "afterbegin",
+            "afterend"
+        ]
+    },
+    "purposeMailMessage": {
+        "type": "text",
+        "default": "",
+        "format": "plain",
+        "messageDefault": "Link sends email"
+    },
+    "purposeMailClass": {
+        "type": "text",
+        "default": "",
+        "format": "css_class"
+    },
+    "purposeMailIconWrapperClass": {
+        "type": "text",
+        "default": "",
+        "format": "css_class"
+    },
+    "purposeTel": {
+        "type": "checkbox",
+        "default": "1"
+    },
+    "purposeTelIconType": {
+        "type": "select",
+        "default": "html",
+        "options": [
+            "html",
+            "classes"
+        ]
+    },
+    "purposeTelIconClasses": {
+        "type": "textarea",
+        "default": "",
+        "format": "css_classes"
+    },
+    "purposeTelIconPosition": {
+        "type": "select",
+        "default": "beforeend",
+        "options": [
+            "beforeend",
+            "beforebegin",
+            "afterbegin",
+            "afterend"
+        ]
+    },
+    "purposeTelMessage": {
+        "type": "text",
+        "default": "",
+        "format": "plain",
+        "messageDefault": "Link opens phone app"
+    },
+    "purposeTelClass": {
+        "type": "text",
+        "default": "",
+        "format": "css_class"
+    },
+    "purposeTelIconWrapperClass": {
+        "type": "text",
+        "default": "",
+        "format": "css_class"
+    },
+    "purposeNewWindow": {
+        "type": "checkbox",
+        "default": "1"
+    },
+    "purposeNewWindowIconType": {
+        "type": "select",
+        "default": "html",
+        "options": [
+            "html",
+            "classes"
+        ]
+    },
+    "purposeNewWindowIconClasses": {
+        "type": "textarea",
+        "default": "",
+        "format": "css_classes"
+    },
+    "purposeNewWindowIconPosition": {
+        "type": "select",
+        "default": "beforeend",
+        "options": [
+            "beforeend",
+            "beforebegin",
+            "afterbegin",
+            "afterend"
+        ]
+    },
+    "purposeNewWindowMessage": {
+        "type": "text",
+        "default": "",
+        "format": "plain",
+        "messageDefault": "Link opens in new window"
+    },
+    "purposeNewWindowClass": {
+        "type": "text",
+        "default": "",
+        "format": "css_class"
+    },
+    "purposeNewWindowIconWrapperClass": {
+        "type": "text",
+        "default": "",
+        "format": "css_class"
+    }
+}

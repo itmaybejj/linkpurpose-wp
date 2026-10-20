@@ -4,65 +4,14 @@
  * The shim is a classic script. We stub the globals it reads
  * (`window.linkpurposeSettings`, the `LinkPurpose` class) and import it
  * fresh per test with vi.resetModules() so its top-level IIFE re-runs.
+ * The settings payload is derived from the schema fixture so it always
+ * carries exactly the fields PHP emits.
  */
-const SHIM = '../../../assets/js/linkpurpose-wp.js';
+import { SHIM, loadShim, payloadFromSchema } from './helpers.js';
 
+/** Payload for an untouched site, with per-test overrides. */
 function baseSettings( overrides = {} ) {
-	return {
-		domain: 'a.net, https://test.example',
-		roots: '',
-		shadowComponents: '',
-		shadowCSS: 'https://test.example/wp-content/plugins/linkpurpose-wp/assets/lib/css/linkpurpose.css',
-		ignore: '',
-		hideIcon: '',
-		noIconOnImages: false,
-		suppressNoBreak: '',
-		insertIconOutsideHiddenSpan: '',
-		noRunIfPresent: '',
-		noRunIfAbsent: '',
-		themePreprocess: false,
-		purposeExternal: true,
-		purposeExternalNoReferrer: false,
-		purposeExternalNewWindow: false,
-		purposeExternalIconType: 'html',
-		purposeExternalIconClasses: '',
-		purposeExternalIconPosition: 'beforeend',
-		purposeExternalMessage: 'Link is external',
-		purposeExternalClass: '',
-		purposeExternalIconWrapperClass: '',
-		purposeExternalSelector: '',
-		purposeDocument: true,
-		purposeDocumentIconType: 'html',
-		purposeDocumentIconClasses: '',
-		purposeDocumentIconPosition: 'beforeend',
-		purposeDocumentMessage: 'Link downloads document',
-		purposeDocumentClass: '',
-		purposeDocumentIconWrapperClass: '',
-		purposeDocumentSelector: '',
-		purposeDownload: true,
-		purposeDownloadSelector: '',
-		purposeApp: true,
-		purposeAppSelector: '',
-		purposeMail: true,
-		purposeTel: true,
-		purposeNewWindow: true,
-		...overrides,
-	};
-}
-
-async function loadShim( settings, { withLibrary = true } = {} ) {
-	vi.resetModules();
-	delete window.linkPurpose;
-	delete window.linkPurposeWP;
-	delete window.linkPurposeOptions;
-	if ( withLibrary ) {
-		globalThis.LinkPurpose = vi.fn();
-	} else {
-		delete globalThis.LinkPurpose;
-	}
-	window.linkpurposeSettings = settings;
-	await import( SHIM );
-	return window.linkPurposeWP;
+	return payloadFromSchema( { domain: 'a.net, https://test.example', ...overrides } );
 }
 
 beforeAll( () => {

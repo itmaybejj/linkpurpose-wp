@@ -177,7 +177,6 @@ class Test_LinkPurpose_NetworkSettingsPage extends WP_UnitTestCase {
 
 		$this->assert_saved( $result );
 		$this->assertSame( array(), $result['dirty'] );
-		$this->assertSame( array(), $result['inert'] );
 		$stored = Settings::network_storage();
 		$this->assertSame( Schema::keys(), array_keys( $stored['values'] ) );
 		$this->assertSame( array(), $stored['modes'], 'defaults are stored inert' );
@@ -231,16 +230,71 @@ class Test_LinkPurpose_NetworkSettingsPage extends WP_UnitTestCase {
 		$this->assertSame( '', Settings::get( 'purposeExternal' ) );
 	}
 
-	public function test_empty_text_with_a_mode_saves_but_reports_the_inert_mode() {
+	public function test_blank_text_with_all_mode_propagates_the_plugin_default() {
 		$post = $this->untouched_post();
 		$post['network_modes']['roots'] = 'all';
 
 		$result = Page::save_from_post( $post );
 
 		$this->assert_saved( $result );
-		$this->assertSame( array( 'roots' ), $result['inert'] );
-		$this->assertSame( '', Settings::network_mode( 'roots' ) );
-		$this->assertSame( array(), $result['dirty'] );
+		$this->assertArrayNotHasKey( 'inert', $result );
+		$this->assertSame( 'all', Settings::network_mode( 'roots' ) );
+		$this->assertTrue( Settings::has_network_value( 'roots' ) );
+		$this->assertSame( array( 'roots' ), array_keys( $result['dirty'] ) );
+		$this->assertSame( '', $result['dirty']['roots']['new'] );
+		$this->assertSame( 'running', Worker::get_state()['status'] );
+	}
+
+	public function test_blank_text_with_all_mode_resets_sites_still_on_the_previous_network_value() {
+		// Publish "main" to every site, then apply it to this site.
+		$post = $this->untouched_post();
+		$post['network_values']['roots'] = 'main';
+		$post['network_modes']['roots']  = 'all';
+		$this->assert_saved( Page::save_from_post( $post ) );
+		$state = Worker::get_state();
+		$this->assertTrue( Worker::apply_dirty( $state['dirty'], $state['hardcoded'] ) );
+		$this->assertSame( 'main', Settings::get( 'roots' ) );
+		Worker::reset();
+
+		// Blank it out: sites still on "main" go back to the plugin default.
+		$post['network_values']['roots'] = '';
+		$result                          = Page::save_from_post( $post );
+		$this->assert_saved( $result );
+		$this->assertSame( 'main', $result['dirty']['roots']['old'] );
+		$this->assertSame( '', $result['dirty']['roots']['new'] );
+		$state = Worker::get_state();
+		$this->assertSame( array( 'main' ), $state['dirty']['roots']['olds'] );
+		$this->assertTrue( Worker::apply_dirty( $state['dirty'], $state['hardcoded'] ) );
+		$this->assertSame( '', get_option( Settings::OPTION )['roots'] );
+		$this->assertSame( '', Settings::get( 'roots' ), 'site is back on the library default' );
+
+		// A site that customized the value keeps it.
+		update_option( Settings::OPTION, array( 'roots' => 'custom' ) );
+		$this->assertFalse( Worker::apply_dirty( $state['dirty'], $state['hardcoded'] ) );
+		$this->assertSame( 'custom', Settings::get( 'roots' ) );
+	}
+
+	public function test_blank_text_with_lock_pins_sites_to_the_plugin_default() {
+		update_option( Settings::OPTION, array( 'roots' => 'custom', 'purposeExternalMessage' => 'Custom hint' ) );
+		$post = $this->untouched_post();
+		$post['network_modes']['roots']                  = 'lock';
+		$post['network_modes']['purposeExternalMessage'] = 'lock';
+
+		$result = Page::save_from_post( $post );
+
+		$this->assert_saved( $result );
+		$this->assertTrue( $result['dirty']['roots']['force'] );
+		$this->assertTrue( Settings::is_locked( 'roots' ) );
+		$this->assertTrue( Settings::is_locked( 'purposeExternalMessage' ) );
+		$this->assertSame( '', Settings::get( 'roots' ), 'lock overlays the blank at read time' );
+		$this->assertSame( '', Settings::get( 'purposeExternalMessage' ) );
+		$this->assertSame( 'Link is external', \LinkPurpose\Frontend\ConfigBuilder::build()['purposeExternalMessage'], 'the payload resolves the translated default' );
+		$this->assertTrue( SettingsContext::is_disabled( 'roots' ) );
+		$this->assertSame( '', SettingsContext::value( 'roots' ), 'the disabled site input shows the placeholder, not the stale custom value' );
+
+		$state = Worker::get_state();
+		$this->assertTrue( Worker::apply_dirty( $state['dirty'], $state['hardcoded'] ) );
+		$this->assertSame( '', get_option( Settings::OPTION )['roots'], 'lock force-writes the blank' );
 	}
 
 	public function test_second_save_hands_the_previous_value_to_the_worker() {
@@ -295,14 +349,12 @@ class Test_LinkPurpose_NetworkSettingsPage extends WP_UnitTestCase {
 		$this->assertStringNotContainsString( 'were not saved', $this->render_page(), 'notice shows once' );
 	}
 
-	public function test_saved_notice_with_inert_warning() {
-		$user = $this->as_super_admin();
-		set_transient( Page::NOTICE_TRANSIENT . $user->ID, array( 'inert' => array( 'domain' ) ), MINUTE_IN_SECONDS );
+	public function test_saved_notice() {
+		$this->as_super_admin();
 		$_GET['updated'] = '1';
 		$html            = $this->render_page();
 		$this->assertStringContainsString( 'Network defaults saved.', $html );
-		$this->assertStringContainsString( 'Propagation was ignored', $html );
-		$this->assertStringContainsString( 'Additional domains to consider internal', $html );
+		$this->assertStringNotContainsString( 'notice-warning', $html, 'no inert-mode warning exists any more' );
 	}
 
 	public function test_backfill_panel_reflects_worker_state() {

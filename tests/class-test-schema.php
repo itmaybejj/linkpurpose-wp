@@ -100,6 +100,37 @@ class Test_LinkPurpose_Schema extends WP_UnitTestCase {
 		$this->assertFalse( Schema::has( 'noAggregate' ) );
 	}
 
+	/**
+	 * tests/js/fixtures/schema.json is how the Vitest suite learns which
+	 * fields exist. Regenerate it with `composer schema-fixture` whenever
+	 * the schema changes; this test fails until you do.
+	 */
+	public function test_js_fixture_matches_the_schema() {
+		$path = \LinkPurpose\Plugin::path( 'tests/js/fixtures/schema.json' );
+		$this->assertFileExists( $path, 'run: composer schema-fixture' );
+		$fixture = json_decode( (string) file_get_contents( $path ), true ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+		$this->assertIsArray( $fixture );
+
+		$expected = array();
+		foreach ( Schema::fields() as $key => $def ) {
+			$entry = array(
+				'type'    => $def['type'],
+				'default' => (string) $def['default'],
+			);
+			if ( isset( $def['format'] ) ) {
+				$entry['format'] = $def['format'];
+			}
+			if ( isset( $def['options'] ) ) {
+				$entry['options'] = array_keys( $def['options'] );
+			}
+			if ( '' !== Schema::message_default( $key ) ) {
+				$entry['messageDefault'] = Schema::message_default( $key );
+			}
+			$expected[ $key ] = $entry;
+		}
+		$this->assertSame( $expected, $fixture, 'tests/js/fixtures/schema.json is stale: run `composer schema-fixture`' );
+	}
+
 	public function test_purpose_toggles_default_on_and_messages_have_translated_defaults() {
 		foreach ( Schema::purposes() as $purpose ) {
 			$this->assertSame( '1', Schema::field( $purpose['prefix'] )['default'] );

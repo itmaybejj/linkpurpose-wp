@@ -31,6 +31,10 @@ phpunit.xml.dist
 phpunit.xml
 .phpunit.result.cache
 vitest.config.js
+playwright.config.js
+playwright-report
+test-results
+.auth
 
 # Lint / code-quality config
 phpcs.xml.dist

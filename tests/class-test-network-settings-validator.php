@@ -1,6 +1,6 @@
 <?php
 /**
- * Network defaults validator: every key written, modes filtered by type.
+ * Network defaults validator: every key written, modes kept for every type.
  *
  * @package LinkPurpose
  */
@@ -50,30 +50,54 @@ class Test_LinkPurpose_NetworkSettingsValidator extends WP_UnitTestCase {
 			$out['modes'],
 			'unknown keys, unknown modes and "none" are dropped'
 		);
-		$this->assertSame( array(), $out['inert'] );
+		$this->assertArrayNotHasKey( 'inert', $out, 'modes on empty text are no longer reported as inert' );
 	}
 
-	public function test_mode_dropped_for_empty_text_but_kept_for_unchecked_checkbox() {
+	/**
+	 * A blank text value is the instruction "use the plugin default", so its
+	 * mode survives: `all` pushes sites back to the default, `lock` pins
+	 * them there. Same rule as an unchecked checkbox propagating "off".
+	 */
+	public function test_modes_are_kept_for_empty_text_and_unchecked_checkbox() {
 		$out = NetworkSettingsValidator::validate(
 			$this->post(
 				array( 'domain' => '' ),
 				array(
 					'roots'                       => 'lock',
 					'domain'                      => 'all',
+					'purposeExternalMessage'      => 'new',
 					'purposeExternal'             => 'lock',
 					'purposeExternalIconPosition' => 'all',
 				)
 			)
 		);
+		$this->assertSame( '', $out['values']['roots'] );
+		$this->assertSame( '', $out['values']['domain'] );
+		$this->assertSame( '', $out['values']['purposeExternalMessage'] );
 		$this->assertSame( '', $out['values']['purposeExternal'] );
 		$this->assertSame(
 			array(
+				'roots'                       => 'lock',
+				'domain'                      => 'all',
+				'purposeExternalMessage'      => 'new',
 				'purposeExternal'             => 'lock',
 				'purposeExternalIconPosition' => 'all',
 			),
 			$out['modes']
 		);
-		$this->assertSame( array( 'roots', 'domain' ), $out['inert'] );
+	}
+
+	public function test_every_mode_is_kept_on_a_blank_value_for_every_field() {
+		$modes = array();
+		foreach ( Schema::keys() as $i => $key ) {
+			$modes[ $key ] = Settings::MODES[ $i % count( Settings::MODES ) ];
+		}
+		$out = NetworkSettingsValidator::validate( $this->post( array(), $modes ) );
+		$this->assertSame( $modes, $out['modes'], 'no field type silently loses its mode' );
+		foreach ( Schema::fields() as $key => $def ) {
+			$expected = in_array( $def['type'], array( 'text', 'textarea', 'checkbox' ), true ) ? '' : (string) $def['default'];
+			$this->assertSame( $expected, $out['values'][ $key ], $key );
+		}
 	}
 
 	public function test_non_array_buckets_are_ignored() {
@@ -89,14 +113,6 @@ class Test_LinkPurpose_NetworkSettingsValidator extends WP_UnitTestCase {
 		$this->assertSame( 'beforeend', $out['values']['purposeExternalIconPosition'] );
 	}
 
-	public function test_is_text_field() {
-		$this->assertTrue( NetworkSettingsValidator::is_text_field( 'roots' ) );
-		$this->assertTrue( NetworkSettingsValidator::is_text_field( 'purposeExternalMessage' ) );
-		$this->assertFalse( NetworkSettingsValidator::is_text_field( 'purposeExternal' ) );
-		$this->assertFalse( NetworkSettingsValidator::is_text_field( 'purposeExternalIconType' ) );
-		$this->assertFalse( NetworkSettingsValidator::is_text_field( 'nope' ) );
-	}
-
 	public function test_output_round_trips_through_the_storage_normalizer() {
 		$out        = NetworkSettingsValidator::validate(
 			$this->post(
@@ -109,7 +125,13 @@ class Test_LinkPurpose_NetworkSettingsValidator extends WP_UnitTestCase {
 		);
 		$normalized = Settings::normalize_network_storage( $out );
 		$this->assertSame( $out['values'], $normalized['values'] );
-		$this->assertSame( array( 'roots' => 'all' ), $normalized['modes'] );
-		$this->assertArrayNotHasKey( 'inert', $normalized );
+		$this->assertSame(
+			array(
+				'roots'    => 'all',
+				'hideIcon' => 'lock',
+			),
+			$normalized['modes'],
+			'a lock on a blank text value survives normalization (locked to the default)'
+		);
 	}
 }
