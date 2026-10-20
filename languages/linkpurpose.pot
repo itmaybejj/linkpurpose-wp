@@ -1,0 +1,460 @@
+# Copyright (C) 2026 John Jameson
+# This file is distributed under the GPL v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Link Purpose Icons 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/linkpurpose\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-10-19T22:19:56-04:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: linkpurpose\n"
+
+#. Plugin Name of the plugin
+#: linkpurpose.php
+#: src/Form/SettingsPage.php:37
+#: src/Form/SettingsPage.php:102
+msgid "Link Purpose Icons"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: linkpurpose.php
+msgid "https://github.com/itmaybejj/linkpurpose-wp"
+msgstr ""
+
+#. Description of the plugin
+#: linkpurpose.php
+msgid "Adds icons and screen reader hints to links that open new windows, leave the site, download files, send email, make calls or open apps."
+msgstr ""
+
+#. Author of the plugin
+#: linkpurpose.php
+msgid "John Jameson"
+msgstr ""
+
+#. Author URI of the plugin
+#: linkpurpose.php
+msgid "https://editoria11y.com"
+msgstr ""
+
+#: src/Form/SettingsContext.php:162
+msgid "Managed at the network level"
+msgstr ""
+
+#: src/Form/SettingsContext.php:184
+msgid "— No network default —"
+msgstr ""
+
+#: src/Form/SettingsContext.php:185
+msgid "Default for new sites"
+msgstr ""
+
+#: src/Form/SettingsContext.php:186
+msgid "Default for all sites (skip custom values)"
+msgstr ""
+
+#: src/Form/SettingsContext.php:187
+msgid "Override for all sites (delete custom values)"
+msgstr ""
+
+#: src/Form/SettingsContext.php:193
+msgid "Propagation"
+msgstr ""
+
+#: src/Form/SettingsPage.php:38
+msgid "Link Purpose"
+msgstr ""
+
+#: src/Form/SettingsPage.php:84
+msgid "Settings"
+msgstr ""
+
+#: src/Form/SettingsPage.php:98
+msgid "Sorry, you are not allowed to access this page."
+msgstr ""
+
+#: src/Form/SettingsPage.php:107
+msgid "Save settings"
+msgstr ""
+
+#: src/Installer.php:37
+msgid "Link Purpose Icons requires PHP 7.4 or newer."
+msgstr ""
+
+#: src/Settings/Schema.php:172
+msgid "Basic configuration"
+msgstr ""
+
+#: src/Settings/Schema.php:173
+msgid "Most sites only need to define their domain:"
+msgstr ""
+
+#: src/Settings/Schema.php:178
+msgid "Inclusions & exclusions"
+msgstr ""
+
+#: src/Settings/Schema.php:183
+msgid "Theme and plugin compatibility"
+msgstr ""
+
+#: src/Settings/Schema.php:188
+msgid "Tips for matching an existing theme"
+msgstr ""
+
+#: src/Settings/Schema.php:195
+msgid "Icon categories"
+msgstr ""
+
+#: src/Settings/Schema.php:217
+msgid "External link icons"
+msgstr ""
+
+#: src/Settings/Schema.php:218
+msgid "Add icons to links to external sites"
+msgstr ""
+
+#: src/Settings/Schema.php:219
+msgid "External links"
+msgstr ""
+
+#: src/Settings/Schema.php:221
+msgid "Link is external"
+msgstr ""
+
+#: src/Settings/Schema.php:227
+msgid "External links: add noreferrer attribute"
+msgstr ""
+
+#: src/Settings/Schema.php:228
+msgid "External links: open in new window"
+msgstr ""
+
+#: src/Settings/Schema.php:231
+msgid "External links: selectors for additional links to consider external"
+msgstr ""
+
+#: src/Settings/Schema.php:232
+#: src/Settings/Schema.php:271
+#: src/Settings/Schema.php:288
+msgid "Most sites should not change this."
+msgstr ""
+
+#: src/Settings/Schema.php:233
+msgid "Used for links that have internal HREF attributes, but should be flagged as external anyway.<br>Provide a complete CSS selector; be as fancy as you need.<br>E.g.: <code><em>.in-the-news a, [href^=\"https://that-one-subdomain\"]</em></code>"
+msgstr ""
+
+#: src/Settings/Schema.php:238
+msgid "Links to documents"
+msgstr ""
+
+#: src/Settings/Schema.php:239
+msgid "Add icon to links to documents"
+msgstr ""
+
+#: src/Settings/Schema.php:240
+msgid "Documents"
+msgstr ""
+
+#: src/Settings/Schema.php:242
+msgid "Link downloads document"
+msgstr ""
+
+#: src/Settings/Schema.php:248
+msgid "Documents: CSS selector"
+msgstr ""
+
+#. translators: %s: the default CSS selector, wrapped in code tags.
+#: src/Settings/Schema.php:252
+#, php-format
+msgid "Add or remove file types to flag. Separate multiple attributes with commas.<br>Default: %s"
+msgstr ""
+
+#: src/Settings/Schema.php:259
+msgid "Links that download files"
+msgstr ""
+
+#: src/Settings/Schema.php:260
+msgid "Note that this category \"loses\" to documents: it is for non-document file downloads with a \"download\" attribute on the link."
+msgstr ""
+
+#: src/Settings/Schema.php:261
+msgid "Add icon to links that download files"
+msgstr ""
+
+#: src/Settings/Schema.php:262
+msgid "Download links"
+msgstr ""
+
+#: src/Settings/Schema.php:264
+msgid "Link downloads file"
+msgstr ""
+
+#: src/Settings/Schema.php:270
+msgid "Download links: selectors for additional links to consider downloads"
+msgstr ""
+
+#: src/Settings/Schema.php:272
+msgid "Set if you want to flag some links <em>without</em> a download attribute.<br>E.g.: <code><em>[download], [href$=\".zip\"]</em></code>"
+msgstr ""
+
+#: src/Settings/Schema.php:277
+msgid "Links that open applications"
+msgstr ""
+
+#: src/Settings/Schema.php:278
+msgid "Add icon to links that open applications"
+msgstr ""
+
+#: src/Settings/Schema.php:279
+msgid "App links"
+msgstr ""
+
+#: src/Settings/Schema.php:281
+msgid "Link opens app"
+msgstr ""
+
+#: src/Settings/Schema.php:287
+msgid "App links: selector"
+msgstr ""
+
+#: src/Settings/Schema.php:289
+msgid "Modify to map specific protocols out of the not().<br>Default: <code><em>:is([href*=\"://\"]):not([href^=\"https:\"], [href^=\"http:\"], [href^=\"file:\"])</em></code>"
+msgstr ""
+
+#: src/Settings/Schema.php:294
+msgid "Links to email addresses"
+msgstr ""
+
+#: src/Settings/Schema.php:295
+msgid "Add icon to links to email addresses"
+msgstr ""
+
+#: src/Settings/Schema.php:296
+msgid "Email links"
+msgstr ""
+
+#: src/Settings/Schema.php:298
+msgid "Link sends email"
+msgstr ""
+
+#: src/Settings/Schema.php:306
+msgid "Telephone links"
+msgstr ""
+
+#: src/Settings/Schema.php:307
+msgid "Add icon to telephone links"
+msgstr ""
+
+#: src/Settings/Schema.php:308
+msgid "Phone links"
+msgstr ""
+
+#: src/Settings/Schema.php:310
+msgid "Link opens phone app"
+msgstr ""
+
+#: src/Settings/Schema.php:318
+msgid "Links that open in a new window"
+msgstr ""
+
+#: src/Settings/Schema.php:319
+msgid "Add icon to links that open a new window"
+msgstr ""
+
+#: src/Settings/Schema.php:320
+msgid "New window links"
+msgstr ""
+
+#: src/Settings/Schema.php:322
+msgid "Link opens in new window"
+msgstr ""
+
+#: src/Settings/Schema.php:347
+msgid "Additional domains to consider internal in absolute URLs"
+msgstr ""
+
+#: src/Settings/Schema.php:349
+msgid "The current site's domain is always considered internal.<br>Provide a comma separated list of domains, optionally including protocols, trailing paths, subdomains or * as a leading subdomain wildcard:<br>e.g.: <code><em>www.only-www.net, *.all-subdomains.net, a-shared-site.net/just-my-blog</em></code>"
+msgstr ""
+
+#: src/Settings/Schema.php:355
+msgid "Page areas to check"
+msgstr ""
+
+#. translators: %s: link to the MDN CSS selectors reference, reading "CSS selector".
+#: src/Settings/Schema.php:359
+#, php-format
+msgid "%s, e.g.: <code><em>main, #footer</em></code>"
+msgstr ""
+
+#: src/Settings/Schema.php:360
+msgid "CSS selector"
+msgstr ""
+
+#: src/Settings/Schema.php:367
+msgid "Visually hide the icon on these links"
+msgstr ""
+
+#: src/Settings/Schema.php:368
+msgid "CSS selector, e.g. <code><em>.card a</em></code><br>When context makes the link's purpose visually obvious, the icon can be visibly hidden using this setting or your CSS: <code><em>.card .link-purpose-icon { display: none; }</em></code>"
+msgstr ""
+
+#: src/Settings/Schema.php:373
+msgid "Visually hide icons on links with images by default"
+msgstr ""
+
+#: src/Settings/Schema.php:374
+msgid "When enabled, you will need to write CSS to <strong>reveal</strong> the icon span (<code>.link-purpose-icon</code>) on links containing <code>img, svg</code> or <code>figure</code> tags.<br>This is not recommended on new sites: noticing and hiding redundant icons is much less error-prone than noticing and revealing missing icons."
+msgstr ""
+
+#: src/Settings/Schema.php:380
+msgid "Ignore these links entirely"
+msgstr ""
+
+#: src/Settings/Schema.php:381
+msgid "Only use when machine-readable context or the text of the link itself makes the text of the screen reader hint redundant.<br>Links in the admin bar (<code><em>#wpadminbar a</em></code>) are always ignored.<br>E.g.: <code><em>#external-links-list a, .in-the-news a</em></code>."
+msgstr ""
+
+#: src/Settings/Schema.php:400
+msgid "Do not prevent line breaks between last word and icon for these links"
+msgstr ""
+
+#: src/Settings/Schema.php:401
+msgid "Only recommended if issues with gaps or overflow cannot be fixed in the theme; this makes it likely the icon falls to the next line. Set to \"a\" to disable the behavior altogether; otherwise provide exact matches: <code><em>#child-select a, .direct-select</em></code>."
+msgstr ""
+
+#: src/Settings/Schema.php:407
+msgid "Insert icon outside of these hidden spans"
+msgstr ""
+
+#: src/Settings/Schema.php:409
+msgid "Prevents icons from being visually hidden if links already contain screen-reader-only text.<br>Default: <code><em>.screen-reader-text, .sr-only, .visually-hidden</em></code>"
+msgstr ""
+
+#: src/Settings/Schema.php:415
+msgid "Mark links inside this shadow DOM"
+msgstr ""
+
+#: src/Settings/Schema.php:416
+msgid "<em>Most sites do not have Web components and can ignore this setting.</em><br>E.g.: <code><em>custom-tag-tab-widget, .shadow-embed</em></code>"
+msgstr ""
+
+#: src/Settings/Schema.php:422
+msgid "Do not mark any links if elements are detected"
+msgstr ""
+
+#: src/Settings/Schema.php:423
+msgid "Disables the plugin on the page, e.g. while a front-end page builder is active.<br>Default: <code><em>.elementor-editor-active, .wp-customizer-unloading</em></code>"
+msgstr ""
+
+#: src/Settings/Schema.php:429
+msgid "Do not mark any links if elements are absent"
+msgstr ""
+
+#: src/Settings/Schema.php:435
+msgid "Attach library then stop; theme will mark links"
+msgstr ""
+
+#: src/Settings/Schema.php:436
+msgid "Set if you want to preprocess the options object in theme or plugin JS, e.g. to add additional link categories or use custom SVG icons.<br>Your theme will need its own copy of <em>linkpurpose-wp.js</em> that reads <em>window.linkpurposeSettings</em> and initializes the library. Most sites can instead define a <em>window.linkPurposeOptions</em> callback, which receives the built options object before the library starts."
+msgstr ""
+
+#. translators: %s: link category, e.g. "External links".
+#: src/Settings/Schema.php:473
+#, php-format
+msgid "%s: icon type"
+msgstr ""
+
+#: src/Settings/Schema.php:475
+msgid "SVG (default)"
+msgstr ""
+
+#: src/Settings/Schema.php:476
+msgid "Classes (e.g., FontAwesome)"
+msgstr ""
+
+#. translators: %s: link category, e.g. "External links".
+#: src/Settings/Schema.php:486
+#, php-format
+msgid "%s: icon classes"
+msgstr ""
+
+#. translators: %s: link to the default FontAwesome icon, reading as the default class list.
+#: src/Settings/Schema.php:490
+#, php-format
+msgid "Separate multiple classes with commas. Default: %s"
+msgstr ""
+
+#. translators: %s: link category, e.g. "External links".
+#: src/Settings/Schema.php:500
+#, php-format
+msgid "%s: icon position"
+msgstr ""
+
+#: src/Settings/Schema.php:502
+msgid "Append (default)"
+msgstr ""
+
+#: src/Settings/Schema.php:503
+msgid "Before"
+msgstr ""
+
+#: src/Settings/Schema.php:504
+msgid "Prepend"
+msgstr ""
+
+#: src/Settings/Schema.php:505
+msgid "After"
+msgstr ""
+
+#. translators: %s: link category, e.g. "External links".
+#: src/Settings/Schema.php:515
+#, php-format
+msgid "%s: hidden text for screen readers"
+msgstr ""
+
+#. translators: %s: link category, e.g. "External links".
+#: src/Settings/Schema.php:525
+#, php-format
+msgid "%s: class added to the &lt;a&gt; tag"
+msgstr ""
+
+#. translators: %s: link category, e.g. "External links".
+#: src/Settings/Schema.php:535
+#, php-format
+msgid "%s: class added to icon wrapper &lt;span&gt;"
+msgstr ""
+
+#: src/Settings/Schema.php:561
+msgid "Links receive the most specific icon: a new-window link to a document will be marked as a document."
+msgstr ""
+
+#. translators: %s: link to the JS library documentation, reading "Library docs".
+#: src/Settings/Schema.php:564
+#, php-format
+msgid "See the %s for output examples."
+msgstr ""
+
+#: src/Settings/Schema.php:565
+msgid "Library docs"
+msgstr ""
+
+#: src/Settings/Schema.php:574
+msgid "If your theme already styles external-link icons from another plugin and you need near-identical markup:"
+msgstr ""
+
+#: src/Settings/Schema.php:576
+msgid "Switch the relevant categories below to the \"Classes\" icon type and, if the old plugin used an icon font, add that font's classes to \"Icon classes\"."
+msgstr ""
+
+#: src/Settings/Schema.php:577
+msgid "Set \"Class added to the <a> tag\" and \"Class added to icon wrapper <span>\" to the class names your theme CSS targets."
+msgstr ""
+
+#: src/Settings/Schema.php:578
+msgid "If things still do not look right, search your theme for the old selectors and point them at the new classes instead."
+msgstr ""

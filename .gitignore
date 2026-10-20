@@ -1,48 +1,30 @@
-# WordPress - ignore core, configuration, examples, uploads and logs.
-# https://github.com/github/gitignore/blob/main/WordPress.gitignore
+# Dependencies and build artifacts.
+node_modules/
+vendor/
+build/
+.phpunit.result.cache
+.phpcs.cache
+npm-debug.log
 
-# Core
-#
-# Note: if you want to stage/commit WP core files
-# you can delete this whole section/until Configuration.
-/wp-admin/
-/wp-content/index.php
-/wp-content/languages
-/wp-content/plugins/index.php
-/wp-content/themes/index.php
-/wp-includes/
-/index.php
-/license.txt
-/readme.html
-/wp-*.php
-/xmlrpc.php
+# Local-only editor settings (example file is committed).
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.example.json
+.claude/settings.local.json
+.agents/settings.local.json
 
-# Configuration
-wp-config.php
+# Playwright (when added).
+playwright-report/
+test-results/
+.auth/
 
-# Example themes
-/wp-content/themes/twenty*/
+# Session scratch files.
+temp-*
+TEMP-*
 
-# Example plugin
-/wp-content/plugins/hello.php
-
-# Uploads
-/wp-content/uploads/
-
-# Log files
-*.log
-
-# htaccess
-/.htaccess
-
-# All plugins
-#
-# Note: If you wish to whitelist plugins,
-# uncomment the next line
-#/wp-content/plugins
-
-# All themes
-#
-# Note: If you wish to whitelist themes,
-# uncomment the next line
-#/wp-content/themes
+# OS / IDE noise.
+.DS_Store
+**/.DS_Store
+.idea
+Thumbs.db
+Desktop.ini

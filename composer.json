@@ -1,0 +1,47 @@
+{
+    "name": "itmaybejj/linkpurpose-wp",
+    "description": "Link Purpose Icons for WordPress: visible and screen-reader hints for links that open new windows, leave the site, download files, or launch apps.",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "prefer-stable": true,
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=7.4"
+    },
+    "require-dev": {
+        "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+        "wp-coding-standards/wpcs": "^3.0",
+        "phpmd/phpmd": "^2.15",
+        "phpunit/phpunit": "^9.6",
+        "yoast/phpunit-polyfills": "^1.1",
+        "wp-phpunit/wp-phpunit": "^6.0"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "LinkPurpose\\": "src/"
+        }
+    },
+    "scripts": {
+        "setup": "bash scripts/setup.sh",
+        "test": "bash scripts/test.sh",
+        "phpcs": "./vendor/bin/phpcs",
+        "phpcbf": "./vendor/bin/phpcbf",
+        "phpmd": "php -d error_reporting=24575 ./vendor/bin/phpmd src,linkpurpose.php,uninstall.php text ./phpmd.xml",
+        "phpunit": "./vendor/bin/phpunit",
+        "phpunit-multisite": "env WP_MULTISITE=1 ./vendor/bin/phpunit",
+        "install-test-suite": "bash scripts/install-wp-tests.sh linkpurpose_test root root db",
+        "plugin-check": "wp plugin check linkpurpose-wp --slug=linkpurpose --severity=5 --error-severity=5 --include-experimental",
+        "cspell": "npx --yes cspell --config cspell.json --no-progress 'linkpurpose.php' 'uninstall.php' 'src/**/*.php' 'assets/js/*.js' 'README.md' 'readme.txt' 'developers.md' 'AGENTS.md'",
+        "eslint": "npx --no-install eslint assets/js/ tests/js/",
+        "eslint-fix": "npx --no-install eslint --fix assets/js/ tests/js/",
+        "test-js": "npx --no-install vitest run",
+        "test-js-watch": "npx --no-install vitest",
+        "make-pot": "wp i18n make-pot . languages/linkpurpose.pot --slug=linkpurpose --domain=linkpurpose --exclude=vendor,node_modules,build,tests,scripts,assets/lib",
+        "dist": "bash scripts/build-dist.sh"
+    }
+}

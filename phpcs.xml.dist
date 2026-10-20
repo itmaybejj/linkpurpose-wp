@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<ruleset name="LinkPurpose">
+	<description>
+		Coding standards for the Link Purpose Icons WordPress plugin. Inherits
+		the full WordPress ruleset, pins the "linkpurpose" text domain so the
+		I18n sniffs check translation calls against it, and enforces the
+		plugin's global prefixes.
+	</description>
+
+	<file>./src</file>
+	<file>./linkpurpose.php</file>
+	<file>./uninstall.php</file>
+
+	<exclude-pattern>*/vendor/*</exclude-pattern>
+	<exclude-pattern>*/node_modules/*</exclude-pattern>
+	<exclude-pattern>*/assets/lib/*</exclude-pattern>
+	<exclude-pattern>*/build/*</exclude-pattern>
+	<exclude-pattern>*/tests/*</exclude-pattern>
+
+	<arg value="ps"/>
+	<arg name="colors"/>
+	<arg name="extensions" value="php"/>
+
+	<config name="minimum_supported_wp_version" value="6.0"/>
+	<config name="testVersion" value="7.4-"/>
+
+	<rule ref="WordPress"/>
+
+	<!-- src/ uses PSR-4 PascalCase filenames matching the class names
+	     (LinkPurpose\Plugin in Plugin.php). The two file-naming sniffs are
+	     scoped off for that tree only; the root files keep the regular
+	     all-lowercase rule. -->
+	<rule ref="WordPress.Files.FileName.NotHyphenatedLowercase">
+		<exclude-pattern>./src/*</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.Files.FileName.InvalidClassFileName">
+		<exclude-pattern>./src/*</exclude-pattern>
+	</rule>
+
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="linkpurpose"/>
+			</property>
+		</properties>
+	</rule>
+
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<properties>
+			<property name="prefixes" type="array">
+				<element value="linkpurpose"/>
+				<element value="LinkPurpose"/>
+				<element value="LINKPURPOSE"/>
+			</property>
+		</properties>
+	</rule>
+</ruleset>

@@ -1,0 +1,67 @@
+/* Settings → Link Purpose */
+
+.linkpurpose-settings .linkpurpose-section {
+	margin: 1.5em 0 0;
+	padding: 0;
+	border: 0;
+}
+
+.linkpurpose-settings .linkpurpose-section > legend {
+	font-size: 1.5em;
+	font-weight: 500;
+	padding: 1em 0 0.5em;
+	width: 100%;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+.linkpurpose-settings .linkpurpose-group {
+	margin: 0.75em 0;
+	padding: 0.5em 0.75em;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	background: #fff;
+}
+
+.linkpurpose-settings .linkpurpose-group > summary {
+	cursor: pointer;
+	font-size: 15px;
+	font-weight: 600;
+	margin: -0.5em -0.75em;
+	padding: 0.6em 0.75em;
+}
+
+.linkpurpose-settings .linkpurpose-group[open] > summary {
+	border-bottom: 1px solid #dcdcde;
+	margin-bottom: 0.5em;
+}
+
+.linkpurpose-settings .linkpurpose-group > summary:hover,
+.linkpurpose-settings .linkpurpose-group > summary:focus-visible {
+	outline: 1px auto -webkit-focus-ring-color;
+}
+
+.linkpurpose-settings .form-table th {
+	min-width: 220px;
+}
+
+.linkpurpose-settings textarea.code {
+	min-height: 2.4em;
+	resize: vertical;
+}
+
+.linkpurpose-settings .description {
+	max-width: 46em;
+}
+
+.linkpurpose-settings ::placeholder {
+	opacity: 0.8;
+	font-family: Consolas, Monaco, monospace;
+}
+
+.linkpurpose-settings .linkpurpose-locked-by-network {
+	margin: 0 0 0.5em;
+}
+
+.linkpurpose-settings .linkpurpose-network-mode {
+	margin: 0.5em 0 0;
+}

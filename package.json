@@ -1,0 +1,25 @@
+{
+  "name": "linkpurpose-wp",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Link Purpose Icons for WordPress — dev tooling (ESLint, Vitest). No JS build step ships to users.",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint assets/js/ tests/js/",
+    "lint:fix": "eslint --fix assets/js/ tests/js/",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/itmaybejj/linkpurpose-wp.git"
+  },
+  "license": "GPL-2.0-or-later",
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.3.0",
+    "globals": "^17.6.0",
+    "jsdom": "^29.1.1",
+    "vitest": "^4.1.8"
+  }
+}

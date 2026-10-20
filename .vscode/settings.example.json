@@ -1,0 +1,16 @@
+{
+	// Copy to `.vscode/settings.json` (gitignored). The phpsab paths point at
+	// the plugin's own vendor/bin/, populated by `composer install`. Works
+	// as-is when the plugin directory is the VS Code workspace root.
+	"phpsab.executablePathCBF": "${workspaceFolder}/vendor/bin/phpcbf",
+	"phpsab.executablePathCS": "${workspaceFolder}/vendor/bin/phpcs",
+	"phpsab.standard": "WordPress",
+	"phpsab.allowedAutoRulesets": [ "phpcs.xml.dist", "phpcs.xml", ".phpcs.xml.dist", ".phpcs.xml" ],
+	"editor.tabSize": 4,
+	"editor.insertSpaces": false,
+	"editor.detectIndentation": false,
+	"files.eol": "\n",
+	"eslint.workingDirectories": [ "." ],
+	"eslint.options": { "overrideConfigFile": "eslint.config.js" },
+	"sarif-viewer.connectToGithubCodeScanning": "off"
+}

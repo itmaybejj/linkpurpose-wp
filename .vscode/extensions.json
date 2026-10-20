@@ -1,0 +1,9 @@
+{
+	"recommendations": [
+		"valeryanm.vscode-phpsab",
+		"johnbillion.vscode-wordpress-hooks",
+		"dbaeumer.vscode-eslint",
+		"streetsidesoftware.code-spell-checker",
+		"editorconfig.editorconfig"
+	]
+}

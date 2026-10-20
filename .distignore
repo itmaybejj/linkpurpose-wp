@@ -1,0 +1,53 @@
+# Excluded from the WordPress.org distribution archive (read by `wp dist-archive`).
+# Same syntax as .gitignore. Keep in sync with what `wp plugin check` flags
+# when it inspects the source tree: anything dev-only belongs here.
+
+# VCS / editor metadata
+.git
+.gitignore
+.gitattributes
+.editorconfig
+.distignore
+
+# IDE / OS noise
+.idea
+.vscode
+.DS_Store
+Thumbs.db
+
+# Dev environment and agent notes
+.ddev
+.agents
+.claude
+AGENTS.md
+CLAUDE.md
+developers.md
+temp-*
+TEMP-*
+
+# Tests
+tests
+phpunit.xml.dist
+phpunit.xml
+.phpunit.result.cache
+vitest.config.js
+
+# Lint / code-quality config
+phpcs.xml.dist
+phpcs.xml
+phpmd.xml
+phpmd.baseline.xml
+cspell.json
+.phpcs.cache
+eslint.config.js
+
+# Build tooling. The plugin ships its own PSR-4 autoloader (see
+# linkpurpose.php), so vendor/ is dev-only and never ships.
+vendor
+build
+node_modules
+package.json
+package-lock.json
+composer.json
+composer.lock
+scripts
